@@ -1,5 +1,10 @@
 ---
+import { API_URL } from '../config/api';
 ---
+
+<script define:vars={{ apiUrl: API_URL }}>
+  window.API_URL = apiUrl;
+</script>
 
 <script>
   async function logout() {

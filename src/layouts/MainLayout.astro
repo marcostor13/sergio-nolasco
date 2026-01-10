@@ -1,13 +1,13 @@
 ---
 import Logo from '../components/ui/Logo.astro';
 import '../styles/global.css';
+import { API_URL } from '../config/api';
 
 interface Props {
   title?: string;
 }
 
 const { title = 'Sergio Nolasco' } = Astro.props;
-const API_URL = import.meta.env.PUBLIC_API_URL || 'https://sergio.marcostorresalarcon.com';
 ---
 
 <!doctype html>
