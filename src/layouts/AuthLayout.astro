@@ -1,0 +1,32 @@
+---
+import Logo from '../components/ui/Logo.astro';
+import '../styles/global.css';
+
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>
+      {Astro.props.title || 'Sergio Nolasco - Formando Empresarios con Propósito'}
+    </title>
+    <script define:vars={{ apiUrl: API_URL }}>
+      window.API_URL = apiUrl;
+    </script>
+  </head>
+  <body class="min-h-screen bg-background-subtle flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+      <div class="mb-10">
+        <Logo size="lg" />
+      </div>
+      <div class="bg-white rounded-2xl p-8 shadow-xl shadow-slate-200/50 border border-slate-100">
+        <slot />
+      </div>
+    </div>
+  </body>
+</html>

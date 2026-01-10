@@ -1,0 +1,46 @@
+---
+interface Props {
+  size?: 'sm' | 'md' | 'lg';
+  showTagline?: boolean;
+  linkToHome?: boolean;
+}
+
+const { size = 'md', showTagline = true, linkToHome = false } = Astro.props;
+
+const sizeClasses = {
+  sm: 'h-12 md:h-16',
+  md: 'h-16 md:h-24',
+  lg: 'h-24 md:h-32',
+};
+
+const marginBottom = showTagline ? 'mb-4' : 'mb-0';
+---
+
+<div class="text-center">
+  {linkToHome ? (
+    <a href="/" class="inline-block">
+      <div class={`mx-auto ${marginBottom} ${sizeClasses[size]}`}>
+        <img
+          src="/Sergio.png"
+          alt="Sergio Nolasco - Formando Empresarios con Propósito"
+          class="w-auto h-full object-contain mx-auto transition-opacity hover:opacity-80"
+          loading="eager"
+        />
+      </div>
+    </a>
+  ) : (
+    <div class={`mx-auto ${marginBottom} ${sizeClasses[size]}`}>
+      <img
+        src="/Sergio.png"
+        alt="Sergio Nolasco - Formando Empresarios con Propósito"
+        class="w-auto h-full object-contain mx-auto"
+        loading="eager"
+      />
+    </div>
+  )}
+  {showTagline && (
+    <p class="text-primary/80 italic text-sm md:text-base mt-2">
+      Formando Empresarios con Propósito
+    </p>
+  )}
+</div>

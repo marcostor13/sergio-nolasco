@@ -1,0 +1,45 @@
+---
+import Logo from '../components/ui/Logo.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+}
+
+const { title = 'Sergio Nolasco' } = Astro.props;
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <script define:vars={{ apiUrl: API_URL }}>
+      window.API_URL = apiUrl;
+    </script>
+  </head>
+  <body class="min-h-screen bg-background-subtle">
+    <header class="border-b border-slate-100 bg-white sticky top-0 z-50">
+      <div class="container mx-auto px-4 py-4">
+        <div class="flex items-center justify-between">
+          <Logo size="sm" showTagline={false} linkToHome={true} />
+          <nav>
+            <a
+              href="/logout"
+              class="text-slate-600 hover:text-primary font-medium transition-colors"
+            >
+              Cerrar Sesión
+            </a>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

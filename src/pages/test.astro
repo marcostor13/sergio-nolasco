@@ -1,0 +1,623 @@
+---
+import '../styles/global.css';
+import Logo from '../components/ui/Logo.astro';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Auditoría de Vida y Negocios - Sergio Nolasco</title>
+    <script>
+      const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
+      window.API_URL = API_URL;
+    </script>
+  </head>
+  <body class="min-h-screen bg-background-subtle">
+    <div class="min-h-screen flex flex-col">
+      <!-- Header -->
+      <header class="border-b border-slate-100 bg-white sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+          <Logo size="sm" showTagline={false} />
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="flex-1 container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Progress Bar -->
+        <div id="progressContainer" class="mb-8">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-semibold text-slate-600">Tu Progreso</span>
+            <span id="progressText" class="text-sm text-primary font-bold">0%</span>
+          </div>
+          <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden shadow-inner">
+            <div id="progressBar" class="bg-gradient-to-r from-primary to-primary-light h-3 rounded-full transition-all duration-500 ease-out relative">
+              <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+            </div>
+          </div>
+          <div class="text-xs text-slate-400 mt-2 text-center font-medium">
+            Pregunta <span id="currentQuestionDisplay" class="text-slate-900">1</span> de <span id="totalQuestionsDisplay">18</span>
+          </div>
+        </div>
+
+        <!-- Test Container -->
+        <div id="testContainer" class="bg-white rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/60 border border-slate-100 min-h-[450px] relative overflow-hidden transition-all duration-500">
+          <!-- Question Container -->
+          <div id="questionContainer" class="question-container relative z-10">
+            <!-- Questions will be dynamically inserted here -->
+          </div>
+          
+          <!-- Registration Form -->
+          <div id="registrationForm" class="hidden relative z-10">
+            <div class="text-center mb-10">
+              <h2 class="text-3xl font-bold text-slate-900 mb-3">¡Casi terminamos!</h2>
+              <p class="text-slate-600">Crea tu cuenta para guardar tus resultados y acceder a tu hoja de ruta personalizada.</p>
+            </div>
+            
+            <form id="registerForm" class="space-y-6 max-w-md mx-auto">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="label-field">Nombre</label>
+                  <input type="text" name="firstName" id="firstName" class="input-field" placeholder="Juan" required>
+                </div>
+                <div>
+                  <label class="label-field">Apellido</label>
+                  <input type="text" name="lastName" id="lastName" class="input-field" placeholder="Pérez" required>
+                </div>
+              </div>
+              
+              <div>
+                <label class="label-field">Correo Electrónico</label>
+                <input type="email" name="email" id="email" class="input-field" placeholder="tu@email.com" required>
+              </div>
+              
+              <div>
+                <label class="label-field">Contraseña</label>
+                <input type="password" name="password" id="password" class="input-field" placeholder="••••••••" required>
+                <p class="text-xs text-slate-400 mt-2">Mínimo 8 caracteres, incluye mayúscula y número.</p>
+              </div>
+
+              <div id="registerError" class="hidden p-4 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100"></div>
+              
+              <button type="submit" class="btn-primary w-full text-lg py-4">
+                Crear Cuenta y Ver Resultados
+              </button>
+            </form>
+          </div>
+
+          <!-- Results -->
+          <div id="results" class="hidden relative z-10">
+            <div class="text-center mb-10">
+              <h2 class="text-3xl font-bold text-slate-900 mb-2">Tu Perfil de Empresario</h2>
+              <p class="text-slate-600">Este es el análisis de tu situación actual</p>
+            </div>
+            <div id="resultContent" class="space-y-8"></div>
+            <div class="mt-12 text-center">
+              <a href="/login" class="btn-primary inline-block px-10">
+                Acceder al Panel de Control
+              </a>
+            </div>
+          </div>
+
+          <!-- Navigation Buttons -->
+          <div id="navigation" class="flex justify-between items-center mt-12 pt-8 border-t border-slate-50">
+            <button id="prevBtn" class="btn-secondary hidden flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+              Anterior
+            </button>
+            <button id="nextBtn" class="btn-primary ml-auto flex items-center gap-2 px-8">
+              Siguiente
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
+
+<style>
+  .question-container {
+    @apply transition-all duration-500 ease-in-out;
+  }
+
+  .radio-option {
+    @apply flex items-center p-5 bg-slate-50 border border-slate-100 rounded-xl cursor-pointer transition-all duration-200;
+    @apply hover:border-primary/40 hover:bg-primary/5 hover:shadow-sm;
+  }
+
+  .radio-option input[type="radio"] {
+    @apply mr-4 w-5 h-5 text-primary border-slate-300;
+    accent-color: #70BE46;
+  }
+
+  .radio-option input[type="radio"]:checked + span {
+    @apply text-primary font-bold;
+  }
+
+  .radio-option span {
+    @apply text-slate-900 font-medium;
+  }
+
+  .scale-options {
+    @apply flex justify-between gap-3 mt-6;
+  }
+
+  .scale-option {
+    @apply flex-1 flex flex-col items-center p-4 bg-slate-50 border border-slate-100 rounded-xl cursor-pointer transition-all duration-200;
+    @apply hover:border-primary/40 hover:bg-primary/5 hover:shadow-sm;
+  }
+
+  .scale-option input[type="radio"] {
+    @apply mb-3 w-6 h-6 border-slate-300;
+    accent-color: #70BE46;
+  }
+
+  .scale-option span {
+    @apply text-slate-900 font-bold text-xl;
+  }
+
+  .scale-option input[type="radio"]:checked ~ span {
+    @apply text-primary scale-110;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+  }
+
+  .shake {
+    animation: shake 0.4s ease-in-out;
+  }
+
+  #progressBar {
+    box-shadow: 0 0 15px rgba(112, 190, 70, 0.3);
+  }
+</style>
+
+<script>
+  let currentQuestionIndex = 1;
+  const totalQuestions = 18;
+  const answers = {};
+
+  const questions = [
+    {
+      id: 1,
+      part: 1,
+      partTitle: 'Parte 1: El Inventario Físico',
+      partSubtitle: 'Basado en la realidad tangible. "Los resultados no mienten"',
+      text: 'Identidad Profesional: ¿Cuál es tu rol principal hoy?',
+      type: 'radio',
+      options: [
+        { value: 1, label: 'Empleado' },
+        { value: 2, label: 'Autoempleado' },
+        { value: 3, label: 'Dueño de Negocio' },
+        { value: 4, label: 'Inversionista' },
+      ],
+    },
+    {
+      id: 2,
+      part: 1,
+      text: 'Termómetro Financiero: ¿Cuántos meses podrías sobrevivir con tu estilo de vida actual si dejaras de trabajar hoy?',
+      type: 'radio',
+      options: [
+        { value: 1, label: 'Menos de 1 mes' },
+        { value: 2, label: '1-3 meses' },
+        { value: 3, label: '3-6 meses' },
+        { value: 4, label: '6-12 meses' },
+        { value: 5, label: 'Más de 12 meses' },
+      ],
+    },
+    {
+      id: 3,
+      part: 1,
+      text: 'Expansión: ¿Tu visión del mundo se basa en lo local o lo global?',
+      type: 'radio',
+      options: [
+        { value: 1, label: 'Solo local' },
+        { value: 2, label: 'Principalmente local, algo nacional' },
+        { value: 3, label: 'Nacional con alcance internacional' },
+        { value: 4, label: 'Global' },
+      ],
+    },
+    {
+      id: 4,
+      part: 1,
+      text: 'Vehículo Económico: ¿Tienes un sistema legal para generar riqueza?',
+      type: 'radio',
+      options: [
+        { value: 1, label: 'Sin formalizar' },
+        { value: 2, label: 'RUC 10' },
+        { value: 3, label: 'RUC 20' },
+      ],
+    },
+    {
+      id: 5,
+      part: 2,
+      partTitle: 'Parte 2: El Activo Mental',
+      partSubtitle: 'Psicología y Enfoque. Evalúa si la mente es un aliado o un enemigo.',
+      text: 'Claridad de Propósito: ¿Tienes un Objetivo Principal Definido por escrito para este año y lo lees diariamente?',
+      type: 'scale',
+      scaleLabels: { left: 'Nunca', right: 'Siempre' },
+    },
+    {
+      id: 6,
+      part: 2,
+      text: 'Gestión del Miedo: Del 1 al 5, ¿cuánto permites que el miedo paralice tus decisiones?',
+      type: 'scale',
+      scaleLabels: { left: 'Mucho', right: 'Nada' },
+    },
+    {
+      id: 7,
+      part: 2,
+      text: 'Dominio Emocional: Cuando enfrentas un problema grave, ¿cuánto tiempo tardas en pasar de la preocupación a la búsqueda de soluciones?',
+      type: 'scale',
+      scaleLabels: { left: 'Días/Semanas', right: 'Minutos/Horas' },
+    },
+    {
+      id: 8,
+      part: 2,
+      text: 'Auto-Confianza: Si fueras a apostar todo tu dinero a tu capacidad para lograr tu meta actual, ¿lo harías?',
+      type: 'scale',
+      scaleLabels: { left: 'Definitivamente no', right: 'Absolutamente sí' },
+    },
+    {
+      id: 9,
+      part: 2,
+      text: 'Foco: ¿Con qué frecuencia te encuentras distraído o persiguiendo "objetos brillantes" en lugar de terminar lo que empezaste?',
+      type: 'scale',
+      scaleLabels: { left: 'Siempre', right: 'Nunca' },
+    },
+    {
+      id: 10,
+      part: 3,
+      partTitle: 'Parte 3: La Ejecución',
+      partSubtitle: 'Hábitos y Disciplina. Mide la tracción y velocidad de implementación.',
+      text: 'Guerra a la Procrastinación: ¿Dejas para mañana lo que sabes que es crucial hacer hoy?',
+      type: 'scale',
+      scaleLabels: { left: 'Siempre', right: 'Nunca' },
+    },
+    {
+      id: 11,
+      part: 3,
+      text: 'Milla Extra: ¿Con qué frecuencia entregas más valor del que se espera de ti?',
+      type: 'scale',
+      scaleLabels: { left: 'Nunca', right: 'Siempre' },
+    },
+    {
+      id: 12,
+      part: 3,
+      text: 'Planificación: ¿Tus días están planificados la noche anterior o reaccionas a las urgencias del día?',
+      type: 'scale',
+      scaleLabels: { left: 'Solo reacciono', right: 'Siempre planifico' },
+    },
+    {
+      id: 13,
+      part: 3,
+      text: 'Persistencia: Cuando encuentras un obstáculo temporal, ¿tu primer impulso es abandonar o buscar un camino alternativo?',
+      type: 'scale',
+      scaleLabels: { left: 'Abandonar', right: 'Buscar alternativas' },
+    },
+    {
+      id: 14,
+      part: 3,
+      text: 'Salud y Energía: ¿Tienes la energía física y vitalidad necesaria para sostener la presión de tus metas?',
+      type: 'scale',
+      scaleLabels: { left: 'Muy baja', right: 'Excelente' },
+    },
+    {
+      id: 15,
+      part: 4,
+      partTitle: 'Parte 4: Influencia y Entorno',
+      partSubtitle: 'Liderazgo. Mide la capacidad de liderar y cooperar.',
+      text: 'Armonía: ¿Tus relaciones (trabajo/casa) son una fuente de energía o una fuente de estrés?',
+      type: 'scale',
+      scaleLabels: { left: 'Solo estrés', right: 'Solo energía' },
+    },
+    {
+      id: 16,
+      part: 4,
+      text: 'Liderazgo: ¿Inspiras a otros a seguirte por convicción o solo te obedecen por jerarquía/obligación?',
+      type: 'scale',
+      scaleLabels: { left: 'Solo por obligación', right: 'Por convicción' },
+    },
+    {
+      id: 17,
+      part: 4,
+      text: 'Integridad: ¿Tus acciones privadas coinciden con tus palabras públicas?',
+      type: 'scale',
+      scaleLabels: { left: 'Nunca', right: 'Siempre' },
+    },
+    {
+      id: 18,
+      part: 4,
+      text: 'Tolerancia: ¿Eres capaz de escuchar opiniones contrarias a la tuya sin perder la compostura o juzgar?',
+      type: 'scale',
+      scaleLabels: { left: 'Nunca', right: 'Siempre' },
+    },
+  ];
+
+  document.addEventListener('DOMContentLoaded', () => {
+    showQuestion(1);
+    
+    document.getElementById('nextBtn').addEventListener('click', handleNext);
+    document.getElementById('prevBtn').addEventListener('click', handlePrev);
+    document.getElementById('registerForm').addEventListener('submit', handleRegister);
+    document.getElementById('totalQuestionsDisplay').textContent = totalQuestions;
+  });
+
+  function showQuestion(index) {
+    const question = questions[index - 1];
+    const container = document.getElementById('questionContainer');
+    
+    container.style.opacity = '0';
+    container.style.transform = 'translateX(-20px)';
+    
+    setTimeout(() => {
+      let html = '';
+      if (question.partTitle) {
+        html += `
+          <div class="mb-10 pb-6 border-b border-slate-100">
+            <span class="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full mb-3 tracking-wider uppercase">Parte ${question.part} de 4</span>
+            <h2 class="text-3xl font-bold text-slate-900 mb-2">${question.partTitle}</h2>
+            <p class="text-slate-600">${question.partSubtitle}</p>
+          </div>
+        `;
+      }
+      
+      html += `
+        <div class="question-wrapper">
+          <h3 class="text-xl md:text-2xl font-semibold text-slate-900 mb-8 leading-relaxed">
+            ${question.text}
+          </h3>
+      `;
+      
+      if (question.type === 'radio') {
+        html += `<div class="grid gap-4">`;
+        question.options.forEach(opt => {
+          html += `
+            <label class="radio-option">
+              <input type="radio" name="q${index}" value="${opt.value}" ${answers[`q${index}`] == opt.value ? 'checked' : ''}>
+              <span>${opt.label}</span>
+            </label>
+          `;
+        });
+        html += `</div>`;
+      } else {
+        html += `
+          <div class="scale-options">
+            ${[1, 2, 3, 4, 5].map(val => `
+              <label class="scale-option">
+                <input type="radio" name="q${index}" value="${val}" ${answers[`q${index}`] == val ? 'checked' : ''}>
+                <span>${val}</span>
+              </label>
+            `).join('')}
+          </div>
+          <div class="flex justify-between px-2 text-sm font-medium text-slate-400 mt-4 italic">
+            <span>${question.scaleLabels.left}</span>
+            <span>${question.scaleLabels.right}</span>
+          </div>
+        `;
+      }
+      
+      html += `</div>`;
+      container.innerHTML = html;
+      
+      // Auto-update progress on choice
+      container.querySelectorAll('input[type="radio"]').forEach(input => {
+        input.addEventListener('change', () => {
+          answers[`q${index}`] = parseInt(input.value);
+          updateProgress();
+        });
+      });
+
+      setTimeout(() => {
+        container.style.opacity = '1';
+        container.style.transform = 'translateX(0)';
+      }, 50);
+      
+      document.getElementById('currentQuestionDisplay').textContent = index;
+      document.getElementById('prevBtn').classList.toggle('hidden', index === 1);
+      document.getElementById('nextBtn').innerHTML = index === totalQuestions 
+        ? 'Finalizar <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>' 
+        : `Siguiente <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>`;
+      
+      currentQuestionIndex = index;
+      updateProgress();
+    }, 300);
+  }
+
+  function updateProgress() {
+    const answeredCount = Object.keys(answers).length;
+    const progress = (answeredCount / totalQuestions) * 100;
+    
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    
+    progressBar.style.width = `${progress}%`;
+    
+    const currentVal = parseInt(progressText.textContent) || 0;
+    const targetVal = Math.round(progress);
+    
+    if (currentVal !== targetVal) {
+      let val = currentVal;
+      const step = targetVal > currentVal ? 1 : -1;
+      const timer = setInterval(() => {
+        val += step;
+        progressText.textContent = `${val}%`;
+        if (val === targetVal) clearInterval(timer);
+      }, 15);
+    }
+  }
+
+  function handleNext() {
+    const selected = document.querySelector(`input[name="q${currentQuestionIndex}"]:checked`);
+    if (!selected) {
+      const container = document.getElementById('testContainer');
+      container.classList.add('shake');
+      setTimeout(() => container.classList.remove('shake'), 400);
+      return;
+    }
+    
+    answers[`q${currentQuestionIndex}`] = parseInt(selected.value);
+    
+    if (currentQuestionIndex < totalQuestions) {
+      showQuestion(currentQuestionIndex + 1);
+    } else {
+      showRegistrationForm();
+    }
+  }
+
+  function handlePrev() {
+    if (currentQuestionIndex > 1) {
+      showQuestion(currentQuestionIndex - 1);
+    }
+  }
+
+  function showRegistrationForm() {
+    const container = document.getElementById('testContainer');
+    const questionEl = document.getElementById('questionContainer');
+    
+    questionEl.style.opacity = '0';
+    questionEl.style.transform = 'translateY(20px)';
+    
+    setTimeout(() => {
+      questionEl.classList.add('hidden');
+      document.getElementById('navigation').classList.add('hidden');
+      document.getElementById('progressContainer').style.opacity = '0.3';
+      
+      const regForm = document.getElementById('registrationForm');
+      regForm.classList.remove('hidden');
+      regForm.style.opacity = '0';
+      regForm.style.transform = 'translateY(20px)';
+      
+      setTimeout(() => {
+        regForm.style.opacity = '1';
+        regForm.style.transform = 'translateY(0)';
+      }, 50);
+    }, 300);
+  }
+
+  async function handleRegister(e) {
+    e.preventDefault();
+    const errorDiv = document.getElementById('registerError');
+    errorDiv.classList.add('hidden');
+    
+    const formData = new FormData(e.target);
+    const userData = {
+      firstName: formData.get('firstName'),
+      lastName: formData.get('lastName'),
+      email: formData.get('email'),
+      password: formData.get('password'),
+    };
+
+    try {
+      const response = await fetch(`${window.API_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Error al registrarse');
+
+      showResults();
+    } catch (error) {
+      errorDiv.textContent = error instanceof Error ? error.message : 'Error al registrarse';
+      errorDiv.classList.remove('hidden');
+    }
+  }
+
+  function calculateResults() {
+    const mentalidad = ((parseInt(answers.q5) + (6-parseInt(answers.q6)) + parseInt(answers.q7) + parseInt(answers.q8) + (6-parseInt(answers.q9))) / 25) * 100;
+    const ejecucion = (((6-parseInt(answers.q10)) + parseInt(answers.q11) + parseInt(answers.q12) + parseInt(answers.q13) + parseInt(answers.q14)) / 25) * 100;
+    const influencia = ((parseInt(answers.q15) + parseInt(answers.q16) + parseInt(answers.q17) + parseInt(answers.q18)) / 20) * 100;
+    const resultados = ((parseInt(answers.q1) + parseInt(answers.q2) + parseInt(answers.q3) + parseInt(answers.q4)) / 20) * 100;
+    
+    return {
+      mentalidad: Math.round(mentalidad),
+      ejecucion: Math.round(ejecucion),
+      influencia: Math.round(influencia),
+      resultados: Math.round(resultados),
+      overall: Math.round((mentalidad + ejecucion + influencia + resultados) / 4)
+    };
+  }
+
+  function showResults() {
+    document.getElementById('registrationForm').classList.add('hidden');
+    document.getElementById('progressContainer').classList.add('hidden');
+    const resultsEl = document.getElementById('results');
+    resultsEl.classList.remove('hidden');
+    
+    const scores = calculateResults();
+    let status, archetype, description, priority;
+
+    if (scores.overall < 40) {
+      status = 'Sobreviviente';
+      archetype = 'El Soñador Dormido';
+      description = 'Tu activo mental está en números rojos. Tienes deseos, pero tus miedos y falta de hábitos te frenan.';
+      priority = 'Prioridad: Definir metas y eliminar miedos.';
+    } else if (scores.overall < 70) {
+      status = 'Guerrero';
+      if (scores.ejecucion > scores.mentalidad) {
+        archetype = 'El Hustler Agotado';
+        description = 'Trabajas duro, pero sin estrategia clara o sacrificando tu bienestar.';
+        priority = 'Prioridad: Hábitos de productividad y Milla Extra.';
+      } else {
+        archetype = 'El Filósofo Teórico';
+        description = 'Sabe mucho, lee mucho, pero no materializa.';
+        priority = 'Prioridad: Acción Masiva.';
+      }
+    } else {
+      status = 'Arquitecto de Destino';
+      archetype = 'El Empresario con Propósito';
+      description = 'Tienes visión, ejecutas con disciplina, lideras con integridad y obtienes resultados. Estás construyendo legado.';
+      priority = 'Prioridad: Escalar y Liderar.';
+    }
+
+    const resultContent = document.getElementById('resultContent');
+    resultContent.innerHTML = `
+      <div class="bg-primary/5 border border-primary/20 rounded-2xl p-8 mb-8 text-center">
+        <span class="text-primary font-bold text-sm tracking-[0.2em] uppercase mb-2 block">${status}</span>
+        <h3 class="text-4xl font-black text-slate-900 mb-4">${archetype}</h3>
+        <p class="text-lg text-slate-600 mb-6 leading-relaxed">${description}</p>
+        <div class="inline-block px-6 py-2 bg-primary text-white font-bold rounded-full shadow-lg shadow-primary/20">${priority}</div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        ${[
+          { label: 'Mentalidad', val: scores.mentalidad },
+          { label: 'Ejecución', val: scores.ejecucion },
+          { label: 'Influencia', val: scores.influencia },
+          { label: 'Resultados', val: scores.resultados }
+        ].map(p => `
+          <div class="bg-slate-50 border border-slate-100 rounded-2xl p-6">
+            <div class="flex justify-between items-center mb-3">
+              <h4 class="font-bold text-slate-900">${p.label}</h4>
+              <span class="text-primary font-black">${p.val}%</span>
+            </div>
+            <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden shadow-inner">
+              <div class="bg-primary h-full transition-all duration-1000" style="width: ${p.val}%"></div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="bg-foreground text-white rounded-3xl p-10 mt-10 text-center relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+        <h4 class="text-primary-light font-bold text-xl mb-2 relative z-10">Puntaje Global</h4>
+        <div class="text-7xl font-black mb-4 relative z-10">${scores.overall}%</div>
+        <p class="text-slate-400 max-w-md mx-auto relative z-10">Este es tu nivel de madurez empresarial actual. Estás a un paso de iniciar tu transformación.</p>
+      </div>
+    `;
+  }
+</script>
