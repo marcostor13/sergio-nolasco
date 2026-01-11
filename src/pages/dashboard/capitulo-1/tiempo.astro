@@ -1,0 +1,131 @@
+---
+import DashboardLayout from '../../../layouts/DashboardLayout.astro';
+import Button from '../../../components/ui/Button.astro';
+---
+
+<DashboardLayout title="Auditoría del Tiempo - Capítulo 1">
+  <div class="max-w-3xl mx-auto">
+    <div class="mb-10">
+      <div class="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full mb-3 tracking-wider uppercase">
+        Capítulo 1
+      </div>
+      <h1 class="text-3xl font-black text-slate-900 mb-4">
+        La Moneda de la Vida
+      </h1>
+      <p class="text-lg text-slate-600 leading-relaxed">
+        Todos tenemos 168 horas a la semana. ¿Cuántas inviertes en crear tu futuro y cuántas regalas?
+      </p>
+    </div>
+
+    <div class="bg-white rounded-2xl p-8 border border-slate-100 shadow-xl shadow-slate-200/50">
+      <form id="timeForm" class="space-y-8">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="space-y-2">
+            <label class="block text-sm font-bold text-green-600">Horas de Creación</label>
+            <input type="number" name="creationHours" class="input-field time-input" placeholder="0" required min="0">
+            <p class="text-xs text-slate-400">Trabajo profundo, estrategia, educación.</p>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-bold text-orange-500">Horas de Reacción</label>
+            <input type="number" name="reactionHours" class="input-field time-input" placeholder="0" required min="0">
+            <p class="text-xs text-slate-400">Urgencias, emails, apagar fuegos.</p>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-bold text-red-500">Horas de Consumo</label>
+            <input type="number" name="consumptionHours" class="input-field time-input" placeholder="0" required min="0">
+            <p class="text-xs text-slate-400">Netflix, redes sociales, ocio pasivo.</p>
+          </div>
+        </div>
+
+        <div class="bg-slate-50 rounded-xl p-6 flex justify-between items-center">
+          <span class="text-slate-600 font-medium">Total Horas Semana:</span>
+          <div class="text-right">
+            <span id="totalHours" class="text-3xl font-black text-slate-900">0</span>
+            <span class="text-slate-400 text-sm">/ 168</span>
+          </div>
+        </div>
+        <p id="validationMsg" class="text-center text-sm text-red-500 hidden font-bold">La suma debe ser exactamente 168 horas.</p>
+
+        <div class="pt-2 border-t border-slate-100">
+          <Button type="submit" id="submitBtn" class="w-full" disabled>
+            Guardar y Continuar
+          </Button>
+        </div>
+
+        <div id="message" class="hidden p-4 rounded-lg text-sm text-center"></div>
+      </form>
+    </div>
+  </div>
+</DashboardLayout>
+
+<script>
+  const inputs = document.querySelectorAll('.time-input');
+  const totalDisplay = document.getElementById('totalHours');
+  const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement;
+  const validationMsg = document.getElementById('validationMsg');
+  const form = document.getElementById('timeForm') as HTMLFormElement;
+  const messageDiv = document.getElementById('message') as HTMLDivElement;
+
+  function calculateTotal() {
+    let total = 0;
+    inputs.forEach(input => {
+      total += parseInt((input as HTMLInputElement).value) || 0;
+    });
+    
+    if (totalDisplay) totalDisplay.textContent = total.toString();
+    
+    if (total === 168) {
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      if (validationMsg) validationMsg.classList.add('hidden');
+      if (totalDisplay) totalDisplay.classList.add('text-primary');
+      if (totalDisplay) totalDisplay.classList.remove('text-red-500');
+    } else {
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      if (validationMsg) validationMsg.classList.remove('hidden');
+      if (totalDisplay) totalDisplay.classList.remove('text-primary');
+      if (totalDisplay) totalDisplay.classList.add('text-red-500');
+    }
+  }
+
+  inputs.forEach(input => {
+    input.addEventListener('input', calculateTotal);
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(form);
+    const data = {
+      creationHours: parseInt(formData.get('creationHours') as string),
+      reactionHours: parseInt(formData.get('reactionHours') as string),
+      consumptionHours: parseInt(formData.get('consumptionHours') as string),
+    };
+
+    try {
+      const response = await fetch(`${window.API_URL}/exercises/time`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) throw new Error('Error al guardar');
+
+      messageDiv.textContent = '¡Datos guardados!';
+      messageDiv.className = 'p-4 bg-green-50 text-green-600 rounded-lg text-sm text-center font-medium block mt-4';
+      
+      setTimeout(() => {
+        window.location.href = '/dashboard/capitulo-1/vitalidad';
+      }, 1500);
+
+    } catch (error) {
+      messageDiv.textContent = 'Error al guardar.';
+      messageDiv.className = 'p-4 bg-red-50 text-red-600 rounded-lg text-sm text-center font-medium block mt-4';
+    }
+  });
+</script>

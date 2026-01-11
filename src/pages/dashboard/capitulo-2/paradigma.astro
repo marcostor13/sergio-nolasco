@@ -1,0 +1,88 @@
+---
+import DashboardLayout from '../../../layouts/DashboardLayout.astro';
+import Button from '../../../components/ui/Button.astro';
+---
+
+<DashboardLayout title="Salto de Paradigma - Capítulo 2">
+  <div class="max-w-3xl mx-auto">
+    <div class="mb-10">
+      <div class="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full mb-3 tracking-wider uppercase">
+        Capítulo 2
+      </div>
+      <h1 class="text-3xl font-black text-slate-900 mb-4">
+        Salto de Paradigma
+      </h1>
+      <p class="text-lg text-slate-600 leading-relaxed">
+        Define tu nuevo sistema operativo mental. Escribe un párrafo que describa tu realidad ideal como si ya estuviera sucediendo.
+      </p>
+    </div>
+
+    <div class="bg-white rounded-2xl p-8 border border-slate-100 shadow-xl shadow-slate-200/50">
+      <form id="paradigmForm" class="space-y-8">
+        
+        <div>
+          <label class="label-field text-lg mb-4">Declaración de Poder</label>
+          <div class="relative">
+            <textarea 
+              name="declaration" 
+              rows="12" 
+              class="w-full px-6 py-6 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 shadow-inner font-serif text-lg leading-relaxed"
+              placeholder="Estoy tan feliz y agradecido ahora que..." 
+              required
+            ></textarea>
+            <div class="absolute bottom-4 right-4 text-slate-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 mt-3 text-right">Escribe en tiempo presente, positivo y personal.</p>
+        </div>
+
+        <div class="pt-6 border-t border-slate-100">
+          <Button type="submit" class="w-full text-lg py-4">
+            Instalar Nuevo Paradigma
+          </Button>
+        </div>
+
+        <div id="message" class="hidden p-4 rounded-lg text-sm text-center"></div>
+      </form>
+    </div>
+  </div>
+</DashboardLayout>
+
+<script>
+  const form = document.getElementById('paradigmForm') as HTMLFormElement;
+  const messageDiv = document.getElementById('message') as HTMLDivElement;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(form);
+    const data = {
+      declaration: formData.get('declaration'),
+    };
+
+    try {
+      const response = await fetch(`${window.API_URL}/exercises/paradigm`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) throw new Error('Error al guardar');
+
+      messageDiv.textContent = '¡Paradigma instalado con éxito!';
+      messageDiv.className = 'p-4 bg-green-50 text-green-600 rounded-lg text-sm text-center font-medium block mt-4';
+      
+      setTimeout(() => {
+        window.location.href = '/dashboard';
+      }, 1500);
+
+    } catch (error) {
+      messageDiv.textContent = 'Error al guardar.';
+      messageDiv.className = 'p-4 bg-red-50 text-red-600 rounded-lg text-sm text-center font-medium block mt-4';
+    }
+  });
+</script>

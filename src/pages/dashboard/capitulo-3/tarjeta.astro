@@ -1,0 +1,148 @@
+---
+import DashboardLayout from '../../../layouts/DashboardLayout.astro';
+---
+
+<DashboardLayout title="Tarjeta de Meta - Capítulo 3">
+  <div class="max-w-md mx-auto py-8">
+    <div class="mb-8 text-center">
+      <h1 class="text-3xl font-black text-slate-900 mb-2">
+        Tu Tarjeta de Meta
+      </h1>
+      <p class="text-slate-600">
+        Llévala siempre contigo. Léela al despertar y al dormir.
+      </p>
+    </div>
+
+    <!-- The Card -->
+    <div class="perspective-1000 group">
+      <div class="relative w-full aspect-[1.58] transition-all duration-700 preserve-3d group-hover:rotate-y-180 cursor-pointer shadow-2xl rounded-2xl">
+        
+        <!-- Front -->
+        <div class="absolute inset-0 backface-hidden bg-gradient-to-br from-primary to-primary-dark rounded-2xl p-8 text-white flex flex-col justify-between shadow-xl">
+          <div>
+            <img src="/favicon.svg" class="w-8 h-8 opacity-50 mb-4" />
+            <h3 class="font-bold text-sm tracking-[0.2em] uppercase opacity-80">Meta Principal</h3>
+          </div>
+          <div id="cardContent" class="text-2xl font-serif font-bold leading-tight">
+            "Me siento feliz y agradecido ahora que..."
+          </div>
+          <div class="text-right">
+            <span class="text-xs font-medium opacity-60">Toque para editar</span>
+          </div>
+        </div>
+
+        <!-- Back (Editor) -->
+        <div class="absolute inset-0 backface-hidden rotate-y-180 bg-white rounded-2xl p-6 flex flex-col shadow-xl border border-slate-100">
+          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Editar Meta</h3>
+          <form id="goalForm" class="flex-1 flex flex-col">
+            <textarea 
+              name="goalText" 
+              class="flex-1 w-full resize-none border-0 focus:ring-0 p-0 text-lg font-serif text-slate-800 placeholder-slate-300"
+              placeholder="Escribe tu meta aquí..."
+              required
+            ></textarea>
+            <button type="submit" class="mt-4 w-full py-2 bg-slate-900 text-white rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors">
+              Guardar Tarjeta
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="mt-12 space-y-4">
+      <div class="flex items-center gap-4 p-4 bg-white rounded-xl border border-slate-100">
+        <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-bold text-slate-900">Recordatorio Matutino</h4>
+          <p class="text-xs text-slate-500">Leer al despertar</p>
+        </div>
+        <label class="ml-auto relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" class="sr-only peer" checked>
+          <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+        </label>
+      </div>
+
+      <div class="flex items-center gap-4 p-4 bg-white rounded-xl border border-slate-100">
+        <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-bold text-slate-900">Recordatorio Nocturno</h4>
+          <p class="text-xs text-slate-500">Leer antes de dormir</p>
+        </div>
+        <label class="ml-auto relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" class="sr-only peer" checked>
+          <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+        </label>
+      </div>
+    </div>
+  </div>
+</DashboardLayout>
+
+<style>
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+</style>
+
+<script>
+  const form = document.getElementById('goalForm') as HTMLFormElement;
+  const cardContent = document.getElementById('cardContent');
+
+  // Load existing goal
+  async function loadGoal() {
+    try {
+      const response = await fetch(`${window.API_URL}/exercises/goal-card/latest`, {
+        credentials: 'include',
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data && data.goalText) {
+          if (cardContent) cardContent.textContent = data.goalText;
+          const textarea = form.querySelector('textarea');
+          if (textarea) textarea.value = data.goalText;
+        }
+      }
+    } catch (e) {}
+  }
+  loadGoal();
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const goalText = formData.get('goalText') as string;
+
+    try {
+      const response = await fetch(`${window.API_URL}/exercises/goal-card`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ goalText }),
+      });
+
+      if (!response.ok) throw new Error('Error');
+      
+      if (cardContent) cardContent.textContent = goalText;
+      // Flip back animation handled by CSS hover, but user sees change immediately
+      alert('Tarjeta actualizada'); // Simple feedback for this UI
+    } catch (error) {
+      alert('Error al guardar');
+    }
+  });
+</script>
