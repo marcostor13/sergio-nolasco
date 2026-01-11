@@ -530,7 +530,11 @@ import { API_URL } from '../config/api';
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || 'Error al registrarse');
 
+      // Si el registro es exitoso, mostramos los resultados y el login ya está seteado por la cookie
       showResults();
+      
+      // Opcional: Redirigir al dashboard después de unos segundos o dejar que vean los resultados
+      // Por ahora se quedan en la página de resultados como estaba.
     } catch (error) {
       errorDiv.textContent = error instanceof Error ? error.message : 'Error al registrarse';
       errorDiv.classList.remove('hidden');

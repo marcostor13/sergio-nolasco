@@ -104,13 +104,13 @@ import Input from '../components/ui/Input.astro';
       }
 
       successMessage.textContent =
-        '¡Registro exitoso! Revisa tu correo para verificar tu cuenta.';
+        '¡Registro exitoso! Iniciando sesión...';
       successMessage.classList.remove('hidden');
       form.reset();
 
       setTimeout(() => {
-        window.location.href = '/login';
-      }, 3000);
+        window.location.href = '/dashboard';
+      }, 1500);
     } catch (error) {
       errorMessage.textContent =
         error instanceof Error ? error.message : 'Error al registrarse';
