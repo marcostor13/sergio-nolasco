@@ -43,6 +43,27 @@ const menuItems = [
     </a>
 
     <nav class="space-y-8">
+      <div>
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
+          Principal
+        </h3>
+        <ul class="space-y-1">
+          <li>
+            <a
+              href="/dashboard"
+              class:list={[
+                'block px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200',
+                currentPath === '/dashboard'
+                  ? 'bg-primary/10 text-primary'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900',
+              ]}
+            >
+              Panel de Control
+            </a>
+          </li>
+        </ul>
+      </div>
+
       {menuItems.map((chapter) => (
         <div>
           <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">

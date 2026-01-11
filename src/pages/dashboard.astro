@@ -4,53 +4,198 @@ import DashboardLayout from '../layouts/DashboardLayout.astro';
 
 <DashboardLayout title="Panel de Control - Sergio Nolasco">
   <div class="mb-12">
-    <h1 class="text-4xl font-black text-slate-900 mb-3">
-      Panel de Control
-    </h1>
-    <p class="text-lg text-slate-600">
-      Bienvenido de nuevo. Continúa tu transformación donde la dejaste.
-    </p>
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+      <div>
+        <h1 class="text-4xl font-black text-slate-900 mb-3">
+          Panel de Control
+        </h1>
+        <p class="text-lg text-slate-600">
+          Bienvenido de nuevo. Continúa tu transformación donde la dejaste.
+        </p>
+      </div>
+      
+      <!-- Progress Widget -->
+      <div id="progressWidget" class="bg-white px-6 py-4 rounded-2xl shadow-lg border border-slate-100 flex items-center gap-4 min-w-[280px] hidden">
+        <div class="relative w-16 h-16 flex items-center justify-center">
+          <svg class="w-full h-full -rotate-90 transform" viewBox="0 0 36 36">
+            <path
+              class="text-slate-100"
+              d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+            />
+            <path
+              id="progressCircle"
+              class="text-primary transition-all duration-1000 ease-out"
+              stroke-dasharray="0, 100"
+              d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+            />
+          </svg>
+          <span id="progressText" class="absolute font-bold text-slate-900 text-sm">0%</span>
+        </div>
+        <div>
+          <h4 class="font-bold text-slate-900 text-sm">Progreso Global</h4>
+          <p class="text-xs text-slate-500 mt-1">Tu camino a la maestría</p>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
     <!-- Card 1: Auditoría de Realidad -->
-    <a href="/dashboard/capitulo-1/tesoreria" class="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300 group relative overflow-hidden">
-      <div class="absolute top-0 right-0 bg-primary/5 w-32 h-32 rounded-bl-full -mr-8 -mt-8 group-hover:bg-primary/10 transition-colors"></div>
-      <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary transition-colors duration-300 relative z-10">
-        <span class="text-primary font-black text-xl group-hover:text-white">1</span>
+    <a href="/dashboard/capitulo-1/tesoreria" id="card-1" class="bg-white rounded-3xl p-6 border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300 group relative overflow-hidden flex flex-col">
+      <div class="absolute top-0 right-0 bg-primary/5 w-24 h-24 rounded-bl-full -mr-6 -mt-6 group-hover:bg-primary/10 transition-colors"></div>
+      <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-primary transition-colors duration-300 relative z-10">
+        <span class="text-primary font-black text-lg group-hover:text-white">1</span>
       </div>
-      <h3 class="text-xl font-bold text-slate-900 mb-3 relative z-10">
+      <h3 class="text-lg font-bold text-slate-900 mb-2 relative z-10">
         Auditoría de Realidad
       </h3>
-      <p class="text-slate-600 text-sm leading-relaxed relative z-10">
-        Evalúa tu situación actual: Finanzas, Tiempo, Vitalidad e Influencia. "La verdad os hará libres".
+      <p class="text-slate-600 text-xs leading-relaxed relative z-10 flex-1">
+        Finanzas, Tiempo, Vitalidad e Influencia.
       </p>
+      <div class="mt-4 pt-4 border-t border-slate-50 flex justify-between items-center">
+        <span class="text-xs font-bold text-slate-400 group-hover:text-primary transition-colors">Ir al módulo</span>
+        <div id="check-1" class="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-white transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+        </div>
+      </div>
     </a>
 
     <!-- Card 2: Reprogramación -->
-    <a href="/dashboard/capitulo-2/excusas" class="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300 group relative overflow-hidden">
-      <div class="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary transition-colors duration-300">
-        <span class="text-slate-500 font-black text-xl group-hover:text-white">2</span>
+    <a href="/dashboard/capitulo-2/excusas" id="card-2" class="bg-white rounded-3xl p-6 border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300 group relative overflow-hidden flex flex-col">
+      <div class="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-primary transition-colors duration-300">
+        <span class="text-slate-500 font-black text-lg group-hover:text-white">2</span>
       </div>
-      <h3 class="text-xl font-bold text-slate-900 mb-3">
+      <h3 class="text-lg font-bold text-slate-900 mb-2">
         Reprogramación Mental
       </h3>
-      <p class="text-slate-600 text-sm leading-relaxed">
-        Elimina excusas, destruye creencias limitantes y define tu nuevo paradigma de abundancia.
+      <p class="text-slate-600 text-xs leading-relaxed flex-1">
+        Excusas, Creencias y Nuevo Paradigma.
       </p>
+      <div class="mt-4 pt-4 border-t border-slate-50 flex justify-between items-center">
+        <span class="text-xs font-bold text-slate-400 group-hover:text-primary transition-colors">Ir al módulo</span>
+        <div id="check-2" class="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-white transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+        </div>
+      </div>
     </a>
 
     <!-- Card 3: Diseño de Futuro -->
-    <a href="/dashboard/capitulo-3/misiones" class="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300 group relative overflow-hidden">
-       <div class="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary transition-colors duration-300">
-        <span class="text-slate-500 font-black text-xl group-hover:text-white">3</span>
+    <a href="/dashboard/capitulo-3/misiones" id="card-3" class="bg-white rounded-3xl p-6 border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300 group relative overflow-hidden flex flex-col">
+       <div class="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-primary transition-colors duration-300">
+        <span class="text-slate-500 font-black text-lg group-hover:text-white">3</span>
       </div>
-      <h3 class="text-xl font-bold text-slate-900 mb-3">
+      <h3 class="text-lg font-bold text-slate-900 mb-2">
         Diseño de Futuro
       </h3>
-      <p class="text-slate-600 text-sm leading-relaxed">
-        Establece tus 3 Misiones Imposibles y crea tu Tarjeta de Meta digital.
+      <p class="text-slate-600 text-xs leading-relaxed flex-1">
+        Misiones Imposibles y Tarjeta de Meta.
       </p>
+      <div class="mt-4 pt-4 border-t border-slate-50 flex justify-between items-center">
+        <span class="text-xs font-bold text-slate-400 group-hover:text-primary transition-colors">Ir al módulo</span>
+        <div id="check-3" class="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-white transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Card 4: Maestría -->
+    <a href="/dashboard/capitulo-4/auditoria" id="card-4" class="bg-white rounded-3xl p-6 border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300 group relative overflow-hidden flex flex-col">
+       <div class="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-primary transition-colors duration-300">
+        <span class="text-slate-500 font-black text-lg group-hover:text-white">4</span>
+      </div>
+      <h3 class="text-lg font-bold text-slate-900 mb-2">
+        Maestría y Acción
+      </h3>
+      <p class="text-slate-600 text-xs leading-relaxed flex-1">
+        Auditoría de 3 Rs y Retos de 7 Días.
+      </p>
+      <div class="mt-4 pt-4 border-t border-slate-50 flex justify-between items-center">
+        <span class="text-xs font-bold text-slate-400 group-hover:text-primary transition-colors">Ir al módulo</span>
+        <div id="check-4" class="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-white transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+        </div>
+      </div>
     </a>
   </div>
 </DashboardLayout>
+
+<script>
+  async function loadProgress() {
+    try {
+      const response = await fetch(`${window.API_URL}/exercises/progress`, {
+        credentials: 'include',
+      });
+      if (!response.ok) return;
+
+      const data = await response.json();
+      
+      // Update Global Widget
+      const widget = document.getElementById('progressWidget');
+      const circle = document.getElementById('progressCircle');
+      const text = document.getElementById('progressText');
+      
+      if (widget && circle && text) {
+        widget.classList.remove('hidden');
+        // Small delay to allow layout to settle before animation
+        setTimeout(() => {
+          circle.setAttribute('stroke-dasharray', `${data.percentage}, 100`);
+          text.textContent = `${data.percentage}%`;
+        }, 100);
+      }
+
+      // Update Cards Checks
+      const d = data.details;
+      
+      // Module 1: All 4 parts
+      if (d.financial && d.time && d.vitality && d.influence) {
+        document.getElementById('check-1')?.classList.replace('bg-slate-100', 'bg-green-500');
+      } else if (d.financial || d.time || d.vitality || d.influence) {
+        document.getElementById('check-1')?.classList.replace('bg-slate-100', 'bg-yellow-400'); // Partial
+      }
+
+      // Module 2: All 3 parts
+      if (d.excuses && d.belief && d.paradigm) {
+        document.getElementById('check-2')?.classList.replace('bg-slate-100', 'bg-green-500');
+      } else if (d.excuses || d.belief || d.paradigm) {
+         document.getElementById('check-2')?.classList.replace('bg-slate-100', 'bg-yellow-400');
+      }
+
+      // Module 3: All 2 parts
+      if (d.missions && d.goal) {
+        document.getElementById('check-3')?.classList.replace('bg-slate-100', 'bg-green-500');
+      } else if (d.missions || d.goal) {
+        document.getElementById('check-3')?.classList.replace('bg-slate-100', 'bg-yellow-400');
+      }
+
+       // Module 4: All 2 parts (Audit + Challenges)
+      if (d.audit && d.challenges) {
+        document.getElementById('check-4')?.classList.replace('bg-slate-100', 'bg-green-500');
+      } else if (d.audit || d.challenges) {
+        document.getElementById('check-4')?.classList.replace('bg-slate-100', 'bg-yellow-400');
+      }
+
+    } catch (error) {
+      console.error('Error loading progress', error);
+    }
+  }
+
+  loadProgress();
+</script>
